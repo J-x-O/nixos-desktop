@@ -2,11 +2,11 @@
 set -e
 
 # The physical mount point for the new OS
-GIT_REPO="https://github.com/JoyJab-Games/Project-JoyBoxOS.git"
+GIT_REPO="https://github.com/J-x-O/nixos-desktop.git"
 
 echo "📥 Preparing configuration directory..."
 
-TEMP_CLONE="/tmp/joybox-installer"
+TEMP_CLONE="/tmp/nixos-installer"
 [ -d "$TEMP_CLONE" ] && sudo rm -rf "$TEMP_CLONE"
 
 echo "📂 Cloning repo to memory..."
