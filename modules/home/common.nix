@@ -12,6 +12,11 @@
       email = "JescoVogt@web.de";
     };
   };
+  
+  services.gnome-keyring = {
+    enable = true;
+    components = [ "ssh" "secrets" "pkcs11" ];
+  };
 
   programs.fish.enable = true;
 
