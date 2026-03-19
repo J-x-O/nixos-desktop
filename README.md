@@ -1,8 +1,8 @@
 <h1 align="center">
   <br>
-  <img src="https://cdn.discordapp.com/attachments/1184152045456990249/1468246666950873343/Logo.png?ex=698352c4&is=69820144&hm=1942f5e1134843844bc1a7f3ea72f17ae14510fb905f59743be7c380110b64d9&" alt="JoyBoxOS" width="200"></a>
+  <img src="https://static.wikia.nocookie.net/silly-cat/images/7/78/Melon_Cat_Species_2.png/revision/latest?cb=20240223181954" alt="MelonCat" width="200"></a>
   <br>
-  JoyBox OS
+  NixOs Psychose
   <br>
 </h1>
 
@@ -17,7 +17,7 @@
 ## Installation
 
 - boot into a [minimal NixOS ISO ](https://nixos.org/download/)
-- run the installer script ```bash <(curl -sL https://raw.githubusercontent.com/JoyJab-Games/Project-JoyBoxOS/main/bootstrap.sh)```
+- run the installer script ```bash <(curl -sL https://raw.githubusercontent.com/J-x-O/nixos-desktop/main/bootstrap.sh)```
 - profit
 
 ## Configuration
@@ -25,4 +25,4 @@ If you are setting up an unsupported PC follow these steps:
 
 - Boot the PC from a NixOS ISO.
 - Run ```nixos-generate-config --no-filesystems```
-- Take the resulting hardware-configuration.nix and create a new hardware config under modules/hardware. Use eiter one of the existing disk-layouts or create a new one tailored to the PC.
+- Take the resulting hardware-configuration.nix and create a new hardware config under hosts.
