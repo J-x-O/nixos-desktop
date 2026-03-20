@@ -5,6 +5,9 @@
   ];
   system.stateVersion = "25.11";
   nixpkgs.config.allowUnfree = true;
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
 
   users.users.jesco = {
     isNormalUser = true;

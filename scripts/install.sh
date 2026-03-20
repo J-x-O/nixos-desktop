@@ -48,4 +48,4 @@ sudo cp -r "$REPO_ROOT/." /mnt/etc/nixos/
 #echo "🔑 Setting permissions for user (UID 1000)..."
 #chown -R 1000:100 /mnt/etc/nixos
 
-echo "✅ Done! You can now reboot into your new JoyBoxOS system."
+echo "✅ Done! You can now reboot into your new system."
