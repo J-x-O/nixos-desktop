@@ -3,7 +3,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
         user = "greeter";
       };
     };
@@ -32,16 +32,4 @@
     nerd-fonts.jetbrains-mono
   ];
 
-  # adds the relevant dependency which is broken in the illogical flake
-  nixpkgs.overlays = [
-    (final: prev: {
-      python3 = prev.python3.override {
-        packageOverrides = pyself: pysuper: {
-          kde-material-you-colors = pysuper.kde-material-you-colors.overridePythonAttrs (old: {
-            dependencies = (old.dependencies or []) ++ [ pyself.python-magic ];
-          });
-        };
-      };
-    })
-  ];
 }

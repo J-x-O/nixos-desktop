@@ -470,9 +470,7 @@
     },
     "illogical-flake": {
       "inputs": {
-        "dotfiles": [
-          "dotfiles"
-        ],
+        "dotfiles": "dotfiles",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -480,17 +478,17 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1769877676,
-        "narHash": "sha256-EnGvLmdsst9ldckIyNCN68qv8LzZ8ncY/FCo/rARzho=",
-        "owner": "soymou",
-        "repo": "illogical-flake",
-        "rev": "ff37fa16e759ee30e42176611e590d37672f1b5f",
-        "type": "github"
+        "lastModified": 1774084162,
+        "narHash": "sha256-VInhqOH9Q4L/XzOHMrqG8EVLLqvl9JtIKTumt0i/1h8=",
+        "ref": "refs/heads/dev",
+        "rev": "ea4be1902462bda3c5a6f891b543e8d75da8e10e",
+        "revCount": 67,
+        "type": "git",
+        "url": "file:///home/jesco/Documents/illogical-flake"
       },
       "original": {
-        "owner": "soymou",
-        "repo": "illogical-flake",
-        "type": "github"
+        "type": "git",
+        "url": "file:///home/jesco/Documents/illogical-flake"
       }
     },
     "nixpkgs": {
@@ -550,16 +548,32 @@
         ]
       },
       "locked": {
-        "lastModified": 1769182372,
-        "narHash": "sha256-I5WJ39YMaV+psYbli6rlUaiJOSoC2OwEXOF338d7zdE=",
+        "lastModified": 1774079812,
+        "narHash": "sha256-hlZhsf404K1OXW4gKJP8qjCDZrsFXxvPeUeBJItUjg0=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "0e6e5ff852c442598d1ae8ca5f042947f123f798",
+        "rev": "d730dcf5f95adb5ba9b38a919448e933ac320cd8",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "NUR",
+        "type": "github"
+      }
+    },
+    "photogimp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1770726556,
+        "narHash": "sha256-WEqOibR+7jAsIBQibHfi586C1bAOau5RHOIgostYTk0=",
+        "owner": "Diolinux",
+        "repo": "PhotoGIMP",
+        "rev": "ca9c6f29f83164967b822a6323bf3921bb079d2d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Diolinux",
+        "repo": "PhotoGIMP",
         "type": "github"
       }
     },
@@ -594,11 +608,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768985439,
-        "narHash": "sha256-qkU4r+l+UPz4dutMMRZSin64HuVZkEv9iFpu9yMWVY0=",
+        "lastModified": 1773988952,
+        "narHash": "sha256-XV/WgkkZ6OLJ+W0vrD4bXB7/ErQysc5R5lrkT2/VBVs=",
         "ref": "refs/heads/master",
-        "rev": "191085a8821b35680bba16ce5411fc9dbe912237",
-        "revCount": 731,
+        "rev": "6a244c3c560b45f3b860ed6c0fc54d0291ab6f57",
+        "revCount": 774,
         "type": "git",
         "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
       },
@@ -610,11 +624,11 @@
     "root": {
       "inputs": {
         "disko": "disko",
-        "dotfiles": "dotfiles",
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "illogical-flake": "illogical-flake",
         "nixpkgs": "nixpkgs_3",
+        "photogimp": "photogimp",
         "zen-browser": "zen-browser"
       }
     },

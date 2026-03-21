@@ -1,10 +1,9 @@
 { pkgs, ... }:
 {
   imports = [
-    ../../modules/common
     ./disko.nix
-    ./home.nix
     ./hardware-configuration.nix
+    ./home.nix
   ];
   _module.args.disk-target = "/dev/nvme0n1";
   networking.hostName = "framework-13";

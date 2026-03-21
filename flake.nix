@@ -3,19 +3,18 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    photogimp = {
+      url = "github:Diolinux/PhotoGIMP";
+      flake = false;
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    dotfiles = {
-      url = "git+https://github.com/end-4/dots-hyprland?submodules=1";
-      flake = false;
-    };
     illogical-flake = {
-      url = "github:soymou/illogical-flake";
+      url = "git+file:///home/jesco/Documents/illogical-flake";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.dotfiles.follows = "dotfiles";
     };
     hyprland.url = "github:hyprwm/Hyprland";
     disko.url = "github:nix-community/disko";
@@ -29,21 +28,24 @@
       };
   };
 
-  outputs = { self, nixpkgs, disko, home-manager,  ... }@inputs: {
+  outputs = { self, nixpkgs, disko, home-manager, ... }@inputs:
+  let
+    vars = import ./vars.nix;
+  in {
     nixosConfigurations = {
       framework-13 = nixpkgs.lib.nixosSystem {
-         system = "x86_64-linux";
-         specialArgs = { inherit inputs; };
-         modules = [
-           home-manager.nixosModules.home-manager {
-              home-manager.useGlobalPkgs = true; # Use system pkgs -> save system space
-              home-manager.useUserPackages = true; # Install to user profile
-              home-manager.extraSpecialArgs = { inherit inputs; };
-           }
-           disko.nixosModules.disko
-           ./hosts/framework-13
-         ];
-       };
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs vars; };
+        modules = [
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs vars; };
+          }
+          disko.nixosModules.disko
+          ./hosts/framework-13
+        ];
+      };
     };
   };
 }
