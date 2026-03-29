@@ -43,6 +43,19 @@
           ./hosts/framework-13
         ];
       };
+      tower = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs; };
+        modules = [
+          home-manager.nixosModules.home-manager {
+            home-manager.useGlobalPkgs = true; # Use system pkgs -> save system space
+            home-manager.useUserPackages = true; # Install to user profile
+            home-manager.extraSpecialArgs = { inherit inputs; };
+          }
+          disko.nixosModules.disko
+          ./hosts/tower
+        ];
+      };
     };
   };
 }

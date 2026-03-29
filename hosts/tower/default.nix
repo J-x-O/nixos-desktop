@@ -1,9 +1,10 @@
 { pkgs, ... }:
 {
   imports = [
+    ../../modules/common
     ./disko.nix
-    ./hardware-configuration.nix
     ./home.nix
+    ./hardware-configuration.nix
   ];
   networking.hostName = "framework-13";
 
