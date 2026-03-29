@@ -1,12 +1,11 @@
 { pkgs, ... }:
 {
   imports = [
-    ../../modules/common
     ./disko.nix
-    ./home.nix
     ./hardware-configuration.nix
+    ./home.nix
   ];
-  networking.hostName = "framework-13";
+  networking.hostName = "tower";
 
   # we are using efi, so nodev because internet said so yes
   boot.loader.grub.enable = true;
