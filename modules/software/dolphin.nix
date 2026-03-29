@@ -1,4 +1,4 @@
-{ vars, pkgs, ... }: {
+{ vars, pkgs, lib, config, ... }: {
   
   options.myHome.dolphin.enable = lib.mkEnableOption "shared packages" // { default = true; };
   

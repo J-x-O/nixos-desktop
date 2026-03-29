@@ -1,4 +1,4 @@
-{ vars, photogimp, pkgs, ... }: {
+{ vars, photogimp, pkgs, lib, config, ... }: {
   
   options.myHome.gimp.enable = lib.mkEnableOption "shared packages" // { default = true; };
   
@@ -15,5 +15,5 @@
         recursive = true;
       };
     };
-  }
+  };
 }

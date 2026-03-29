@@ -4,10 +4,6 @@
 
   config = lib.mkIf config.myHome.packages.enable {
     home-manager.users.${vars.username} = {
-      imports = [
-        inputs.zen-browser.homeModules.beta
-      ];
-
       home.packages = with pkgs; [
         # Creative & Media
         bitwig-studio
@@ -28,7 +24,7 @@
         jetbrains.rust-rover
         jetbrains.webstorm
         unityhub
-        godot
+        godot-mono
         sourcegit
 
         # Music / Audio Production
@@ -50,10 +46,7 @@
         kdePackages.kcalc
       ];
 
-      programs.zen-browser = {
-        enable = true;
-        setAsDefaultBrowser = true;
-      };
+
     };
   };
 }

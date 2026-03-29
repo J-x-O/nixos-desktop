@@ -6,5 +6,6 @@
     ./hyprland.nix
     ./proton-mail.nix
     ./zed.nix
+    ./zen.nix
   ];
 }

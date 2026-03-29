@@ -478,17 +478,18 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1774084162,
-        "narHash": "sha256-VInhqOH9Q4L/XzOHMrqG8EVLLqvl9JtIKTumt0i/1h8=",
-        "ref": "refs/heads/dev",
-        "rev": "ea4be1902462bda3c5a6f891b543e8d75da8e10e",
-        "revCount": 67,
-        "type": "git",
-        "url": "file:///home/jesco/Documents/illogical-flake"
+        "lastModified": 1774777092,
+        "narHash": "sha256-1EbONchLH2WjYW6r0FDvPZ5yRYkae9LxElhe3Vim9Jk=",
+        "owner": "J-x-O",
+        "repo": "illogical-flake",
+        "rev": "2c149250645ddd11663b843700552820e930ad27",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/jesco/Documents/illogical-flake"
+        "owner": "J-x-O",
+        "ref": "dev",
+        "repo": "illogical-flake",
+        "type": "github"
       }
     },
     "nixpkgs": {
@@ -690,23 +691,20 @@
     },
     "zen-browser": {
       "inputs": {
-        "home-manager": [
-          "home-manager"
-        ],
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1773737882,
-        "narHash": "sha256-P6k0BtT1/idYveVRdcwAZk8By9UjZW8XOMhSoS6wTBY=",
-        "owner": "0xc000022070",
+        "lastModified": 1774759885,
+        "narHash": "sha256-Y3D2GnZTO6BhGWeVcO6qUkiO5g0dDL2tmokLVWNC1WY=",
+        "owner": "youwen5",
         "repo": "zen-browser-flake",
-        "rev": "a7f1db35d74faf04e5189b3a32f890186ace5c28",
+        "rev": "16e3f4cd221a030186a96015d82dcb3fb4afa4d6",
         "type": "github"
       },
       "original": {
-        "owner": "0xc000022070",
+        "owner": "youwen5",
         "repo": "zen-browser-flake",
         "type": "github"
       }

@@ -9,9 +9,7 @@
   };
 
   config = lib.mkIf config.myHome.hyprland.enable {
-    
-    programs.illogical-impulse.enable = true;
-    
+
     # adds the relevant dependency which is broken in kde-material-you-colors package
     nixpkgs.overlays = [
       (final: prev: {
@@ -24,10 +22,32 @@
         };
       })
     ];
-    
+
     home-manager.users.${vars.username} = {
       imports = [ inputs.illogical-flake.homeManagerModules.default ];
-      
+      programs.illogical-impulse.enable = true;
+
+      xdg.configFile."hypr/custom/keybinds.conf" = lib.mkOverride 0 {
+        text = ''
+          bind = Super, W, exec, zen # Browser
+        '';
+      };
+
+      xdg.mimeApps = {
+        enable = true;
+        defaultApplications = {
+          "text/html" = "zen.desktop";
+          "x-scheme-handler/http" = "zen.desktop";
+          "x-scheme-handler/https" = "zen.desktop";
+          "x-scheme-handler/about" = "zen.desktop";
+          "x-scheme-handler/unknown" = "zen.desktop";
+          "application/xhtml+xml" = "zen.desktop";
+          "application/x-extension-htm" = "zen.desktop";
+          "application/x-extension-html" = "zen.desktop";
+          "application/x-extension-xhtml" = "zen.desktop";
+        };
+      };
+
       xdg.configFile."hypr/custom/rules.conf" = lib.mkOverride 0 {
         text = ''
           windowrule = match:class ^(blender)$, match:title ^(Blender File View)$, min_size 900 500
@@ -42,7 +62,7 @@
           }
         '';
       };
-    
+
       xdg.configFile."hypr/custom/general.conf" = lib.mkOverride 0 {
         text = ''
           ${lib.concatMapStrings (m: "monitor = ${m}\n") config.myHome.hyprland.monitors}
@@ -51,6 +71,6 @@
           }
         '';
       };
-    }
+    };
   };
 }

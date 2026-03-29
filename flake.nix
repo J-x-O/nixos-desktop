@@ -13,29 +13,26 @@
     };
 
     illogical-flake = {
-      url = "git+file:///home/jesco/Documents/illogical-flake";
+      url = "github:J-x-O/illogical-flake/dev";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland.url = "github:hyprwm/Hyprland";
     disko.url = "github:nix-community/disko";
 
     zen-browser = {
-        url = "github:0xc000022070/zen-browser-flake";
-        inputs = {
-          nixpkgs.follows = "nixpkgs";
-          home-manager.follows = "home-manager";
-        };
-      };
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, disko, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, disko, home-manager, photogimp, ... }@inputs:
   let
     vars = import ./vars.nix;
   in {
     nixosConfigurations = {
       framework-13 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs vars; };
+        specialArgs = { inherit inputs vars photogimp; };
         modules = [
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;

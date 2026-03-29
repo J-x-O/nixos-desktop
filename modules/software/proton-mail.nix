@@ -1,4 +1,4 @@
-{ vars, pkgs, ... }: {
+{ vars, pkgs, lib, config, ... }: {
   options.myHome.proton-mail.enable = lib.mkEnableOption "shared packages" // { default = true; };
 
   config = lib.mkIf config.myHome.proton-mail.enable {
