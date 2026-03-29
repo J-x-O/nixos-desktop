@@ -45,12 +45,12 @@
       };
       tower = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs vars photogimp; };
         modules = [
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true; # Use system pkgs -> save system space
             home-manager.useUserPackages = true; # Install to user profile
-            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.extraSpecialArgs = { inherit inputs vars; };
           }
           disko.nixosModules.disko
           ./hosts/tower
