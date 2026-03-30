@@ -12,4 +12,9 @@
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.efiInstallAsRemovable = true;
   boot.loader.grub.device = "nodev";
+
+  # we mount the other hard drive under /storage, so we should make it availiable to jesco
+  systemd.tmpfiles.rules = [
+    "z /storage 0775 jesco users -"
+  ];
 }

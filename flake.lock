@@ -478,11 +478,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1774853450,
-        "narHash": "sha256-Dw7x8Cu9GtJowXwaJ/cl0VeG/qQbOuv51DuL5quZbvk=",
+        "lastModified": 1774862134,
+        "narHash": "sha256-/Bd+0ceni8XxRM2W2NVfUv/wMtuuei2noD6giBrHNwk=",
         "owner": "J-x-O",
         "repo": "illogical-flake",
-        "rev": "ab76ccf03eed99275133cf040b5e949b6dc2d8d4",
+        "rev": "7109d047dc0b4aa297faf5a4a7ba50fcb3dce000",
         "type": "github"
       },
       "original": {
