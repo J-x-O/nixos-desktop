@@ -7,7 +7,10 @@
       stdenv.cc.cc.lib zlib openssl icu
     ];
 
-    environment.systemPackages = [ pkgs.dotnet-sdk_10 ];
+    environment.systemPackages = [
+      pkgs.dotnet-sdk_10
+      pkgs.netcoredbg
+    ];
     environment.variables.DOTNET_ROOT = "${pkgs.dotnet-sdk_10}/share/dotnet";
 
     home-manager.users.${vars.username} = {
