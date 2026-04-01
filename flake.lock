@@ -630,6 +630,7 @@
         "illogical-flake": "illogical-flake",
         "nixpkgs": "nixpkgs_3",
         "photogimp": "photogimp",
+        "zed-netcoredbg": "zed-netcoredbg",
         "zen-browser": "zen-browser"
       }
     },
@@ -686,6 +687,22 @@
       "original": {
         "owner": "hyprwm",
         "repo": "xdg-desktop-portal-hyprland",
+        "type": "github"
+      }
+    },
+    "zed-netcoredbg": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1770219005,
+        "narHash": "sha256-61pLcqtW2ZyqRE7NrASYHDeyyUaDclmFJMu97hYj+xE=",
+        "owner": "qwadrox",
+        "repo": "zed-netcoredbg",
+        "rev": "ebba62d1a23f9eb10a07eccc5e3fc186c43553f7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "qwadrox",
+        "repo": "zed-netcoredbg",
         "type": "github"
       }
     },

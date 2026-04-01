@@ -3,10 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    photogimp = {
-      url = "github:Diolinux/PhotoGIMP";
-      flake = false;
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,16 +19,24 @@
       url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    photogimp = {
+      url = "github:Diolinux/PhotoGIMP";
+      flake = false;
+    };
+    zed-netcoredbg = {
+      url = "github:qwadrox/zed-netcoredbg";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, disko, home-manager, photogimp, ... }@inputs:
+  outputs = { self, nixpkgs, disko, home-manager, photogimp, zed-netcoredbg, ... }@inputs:
   let
     vars = import ./vars.nix;
   in {
     nixosConfigurations = {
       framework-13 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs vars photogimp; };
+        specialArgs = { inherit inputs vars photogimp zed-netcoredbg; };
         modules = [
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
@@ -45,7 +49,7 @@
       };
       tower = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs vars photogimp; };
+        specialArgs = { inherit inputs vars photogimp zed-netcoredbg; };
         modules = [
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true; # Use system pkgs -> save system space
