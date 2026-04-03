@@ -14,7 +14,6 @@
     home-manager.users.${vars.username} = { lib, ... }: {
       programs.zed-editor = {
         enable = true;
-        extensions = [ "nix" "cs" "rust" ];
         userSettings = {
           theme = {
             mode = "dark";
@@ -29,12 +28,12 @@
             context = "Editor && vim_mode == normal";
             bindings = {
               "space f" = "file_finder::Toggle";
-              "space s" = "workspace::ToggleLeftDock";
+              "space s" = "workspace::ActivatePaneLeft";
               "space b" = "pane::GoBack";
-              "space e" = "pane::GoForward";
+              "space e" = "editor::GoToDefinition";
               "space /" = "workspace::NewSearch";
               "space w" = "workspace::Save";
-              "space g" = "workspace::ToggleRightDock";
+              "space g" = "workspace::ActivatePaneLeft";
               "space r n" = "editor::Rename";
               "space o" = "editor::ToggleCodeActions";
               "space q" = "pane::CloseActiveItem";
