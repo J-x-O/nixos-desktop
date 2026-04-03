@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./common.nix
+    ./rclone.nix
     ./dolphin.nix
     ./gimp.nix
     ./hyprland.nix
