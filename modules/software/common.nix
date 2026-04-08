@@ -45,8 +45,6 @@
         kdePackages.filelight
         kdePackages.kcalc
       ];
-
-
     };
   };
 }

@@ -1,8 +1,8 @@
 {...}: {
   imports = [
     ./common.nix
-    ./rclone.nix
     ./dolphin.nix
+    ./freecad.nix
     ./gimp.nix
     ./hyprland.nix
     ./proton-mail.nix
