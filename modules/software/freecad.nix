@@ -25,7 +25,7 @@ in {
       programs.git = {
         enable = true;
 
-        extraConfig = {
+        settings = {
           diff.zip.textconv = "unzip -c -a";
           filter.zippey = {
             smudge = "${zippey}/bin/zippey.py d";
