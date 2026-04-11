@@ -58,6 +58,7 @@
     wget
     curl
     git
+    fastfetch
   ];
 
   # germansky
