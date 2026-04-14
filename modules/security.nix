@@ -6,6 +6,10 @@
   # Polkit for privilege escalation (needed for NetworkManager, etc.)
   security.polkit.enable = true;
 
+  environment.systemPackages = with pkgs; [
+    pwgen
+  ];
+
   # Polkit authentication agent for Hyprland
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     description = "polkit-gnome-authentication-agent-1";
