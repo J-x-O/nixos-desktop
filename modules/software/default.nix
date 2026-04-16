@@ -6,6 +6,7 @@
     ./gimp.nix
     ./hyprland.nix
     ./mail.nix
+    ./steam.nix
     ./zed.nix
     ./zed-godot.nix
     ./zen.nix

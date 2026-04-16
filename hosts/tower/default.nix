@@ -14,6 +14,7 @@
         "desc:BNQ BenQ GL2450H S5D02889019,preferred,-1920x0,1"
       ];
     };
+    gaming.enable = true;
   };
   
   # we mount the other hard drive under /storage, so we should make it availiable to jesco
