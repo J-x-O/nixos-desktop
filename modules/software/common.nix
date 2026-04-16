@@ -5,7 +5,9 @@
   config = lib.mkIf config.myHome.packages.enable {
     virtualisation.docker.enable = true;
     users.users.${vars.username}.extraGroups = [ "docker" ];
-      
+
+    programs.kdeconnect.enable = true;
+
     home-manager.users.${vars.username} = {
       home.packages = with pkgs; [
         # Creative & Media
@@ -35,10 +37,7 @@
 
         # Communication
         discord
-        zoom-us
-        thunderbird
         spotify
-        kdePackages.kdeconnect-kde
 
         # Office & Productivity
         libreoffice-fresh
