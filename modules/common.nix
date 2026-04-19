@@ -49,6 +49,7 @@
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland pkgs.xdg-desktop-portal-gtk ];
     config.hyprland.default = [ "hyprland" "gtk" ];
   };
+  programs.dconf.enable = true;
 
   programs.git = {
       enable = true;
