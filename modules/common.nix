@@ -51,6 +51,27 @@
   };
   programs.dconf.enable = true;
 
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc
+      zlib
+      fuse3
+      icu
+      nss
+      openssl
+      curl
+      expat
+      libGL
+      udev
+      alsa-lib
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXrandr
+      xorg.libXi
+    ];
+  };
+
   programs.git = {
       enable = true;
   };
