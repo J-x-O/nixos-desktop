@@ -7,11 +7,7 @@
       home.packages = [ pkgs.gimp ];
     
       home.file.".config/GIMP/3.0" = {
-        source = "${photogimp}/.var/app/org.gimp.GIMP/config/GIMP/3.0";
-        recursive = true;
-      };
-      home.file.".local/share/GIMP/3.0" = {
-        source = "${photogimp}/.var/app/org.gimp.GIMP/data/GIMP/3.0";
+        source = "${photogimp}/.config/GIMP/3.0";
         recursive = true;
       };
     };
