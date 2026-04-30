@@ -9,6 +9,7 @@
     ./steam.nix
     ./zed.nix
     ./zed-godot.nix
+    ./wine.nix
     ./zen.nix
   ];
 }
