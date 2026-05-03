@@ -12,7 +12,6 @@
       url = "github:J-x-O/illogical-flake/dev";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland.url = "github:hyprwm/Hyprland";
     disko.url = "github:nix-community/disko";
 
     zen-browser = {
