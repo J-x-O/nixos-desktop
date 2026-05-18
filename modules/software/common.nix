@@ -31,6 +31,7 @@
         unityhub
         godot-mono
         sourcegit
+        ttyper
 
         # Music / Audio Production
         decent-sampler          # might need custom derivation
