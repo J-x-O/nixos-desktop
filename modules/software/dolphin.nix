@@ -9,7 +9,11 @@
       kdePackages.qtsvg
       kdePackages.kio # needed since 25.11
       kdePackages.kio-extras #extra protocols support (sftp, fish and more)
+      libmtp
+      jmtpfs
     ];
+
+    services.udev.packages = [ pkgs.libmtp.out ];
     home-manager.users.${vars.username} = {
       home.packages = with pkgs; [
         kdePackages.dolphin
