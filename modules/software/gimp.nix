@@ -9,6 +9,7 @@
       home.file.".config/GIMP/3.0" = {
         source = "${photogimp}/.config/GIMP/3.0";
         recursive = true;
+        force = true;
       };
     };
   };

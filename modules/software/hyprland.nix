@@ -27,19 +27,6 @@
       imports = [ inputs.illogical-flake.homeManagerModules.default ];
       programs.illogical-impulse.enable = true;
 
-      systemd.user.services.bluetooth-agent = {
-        Unit = {
-          Description = "Bluetooth authentication agent";
-          After = [ "graphical-session.target" ];
-          PartOf = [ "graphical-session.target" ];
-        };
-        Service = {
-          ExecStart = "${pkgs.bluez-tools}/bin/bt-agent -c NoInputNoOutput";
-          Restart = "on-failure";
-        };
-        Install.WantedBy = [ "graphical-session.target" ];
-      };
-
       xdg.configFile."hypr/custom/keybinds.conf" = lib.mkOverride 0 {
         text = ''
           bind = Super, W, exec, zen # Browser

@@ -1,5 +1,6 @@
 {...}: {
   imports = [
+    ./aseprite.nix
     ./common.nix
     ./dolphin.nix
     ./freecad.nix
