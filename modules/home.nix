@@ -24,6 +24,13 @@
 
     programs.fish.enable = true;
 
+    xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "application/pdf" = [ "zen.desktop" ];
+      };
+    };
+
     home.stateVersion = "25.11";
   };
 }
