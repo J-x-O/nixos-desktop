@@ -3,8 +3,8 @@
   options.myHome.packages.enable = lib.mkEnableOption "shared packages" // { default = true; };
 
   config = lib.mkIf config.myHome.packages.enable {
-    virtualisation.docker.enable = true;
-    users.users.${vars.username}.extraGroups = [ "docker" ];
+    # virtualisation.docker.enable = true;
+    # users.users.${vars.username}.extraGroups = [ "docker" ];
 
     programs.kdeconnect.enable = true;
 
