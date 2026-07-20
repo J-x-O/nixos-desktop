@@ -15,7 +15,6 @@
         blender
         inkscape
         obs-studio
-        freecad
         kicad
         prusa-slicer
         upscayl
@@ -24,10 +23,6 @@
         # IDEs & Dev Tools
         vscode
         zed-editor
-        jetbrains.pycharm
-        jetbrains.rider
-        jetbrains.rust-rover
-        jetbrains.webstorm
         unityhub
         godot-mono
         sourcegit

@@ -73,6 +73,7 @@
     curl
     git
     fastfetch
+    ghostscript
   ];
 
   # germansky

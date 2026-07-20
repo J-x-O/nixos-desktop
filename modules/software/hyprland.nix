@@ -3,8 +3,32 @@
   options.myHome.hyprland = {
     enable = lib.mkEnableOption "hyprland with illogical-impulse" // { default = true; };
     monitors = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [ ",preferred,auto,1" ];
+      type = lib.types.listOf (lib.types.submodule {
+        options = {
+          output = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "Monitor name/description (e.g. \"eDP-1\" or \"desc:...\"); empty matches all monitors.";
+          };
+          mode = lib.mkOption {
+            type = lib.types.str;
+            default = "preferred";
+          };
+          position = lib.mkOption {
+            type = lib.types.str;
+            default = "auto";
+          };
+          scale = lib.mkOption {
+            type = with lib.types; either (either int float) str;
+            default = 1;
+          };
+          transform = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
+            default = null;
+          };
+        };
+      });
+      default = [];
     };
   };
 
@@ -27,9 +51,9 @@
       imports = [ inputs.illogical-flake.homeManagerModules.default ];
       programs.illogical-impulse.enable = true;
 
-      xdg.configFile."hypr/custom/keybinds.conf" = lib.mkOverride 0 {
+      xdg.configFile."hypr/custom/keybinds.lua" = lib.mkOverride 0 {
         text = ''
-          bind = Super, W, exec, zen # Browser
+          hl.bind("SUPER + W", hl.dsp.exec_cmd("zen"), { description = "Browser" })
         '';
       };
 
@@ -49,27 +73,25 @@
         };
       };
 
-      xdg.configFile."hypr/custom/rules.conf" = lib.mkOverride 0 {
+      xdg.configFile."hypr/custom/rules.lua" = lib.mkOverride 0 {
         text = ''
-          windowrule = match:class ^(blender)$, match:title ^(Blender File View)$, min_size 900 500
-          windowrule = match:class ^(Unity)$, match:title ^(Select .*)$, tag under_cursor
-          windowrule = match:class ^(Unity)$, match:title ^(Color)$, tag under_cursor
-          windowrule = match:class ^(Unity)$, match:title ^(UnityEditor.Searcher.SearcherWindow)$, tag under_cursor
-          windowrule = match:class ^(Unity)$, match:title ^(.*Gradient Editor.*)$, tag under_cursor
-          windowrule {
-            name = UnderCursor
-            match:tag = under_cursor
-            move = max(min(cursor_x,monitor_w-window_w),0) max(min(cursor_y,monitor_h-window_h),0)
-          }
+          hl.window_rule({ match = { class = "^(blender)$", title = "^(Blender File View)$" }, min_size = {900, 500} })
+          hl.window_rule({ match = { class = "^(Unity)$", title = "^(Select .*)$" }, tag = "under_cursor" })
+          hl.window_rule({ match = { class = "^(Unity)$", title = "^(Color)$" }, tag = "under_cursor" })
+          hl.window_rule({ match = { class = "^(Unity)$", title = "^(UnityEditor.Searcher.SearcherWindow)$" }, tag = "under_cursor" })
+          hl.window_rule({ match = { class = "^(Unity)$", title = "^(.*Gradient Editor.*)$" }, tag = "under_cursor" })
+          hl.window_rule({ match = { tag = "under_cursor" }, move = {"max(min(cursor_x,monitor_w-window_w),0)", "max(min(cursor_y,monitor_h-window_h),0)"} })
         '';
       };
 
-      xdg.configFile."hypr/custom/general.conf" = lib.mkOverride 0 {
-        text = ''
-          ${lib.concatMapStrings (m: "monitor = ${m}\n") config.myHome.hyprland.monitors}
-          input {
-            kb_layout = de
-          }
+      xdg.configFile."hypr/custom/general.lua" = lib.mkOverride 0 {
+        text = let
+          luaValue = v: if builtins.isString v then ''"${v}"'' else toString v;
+        in ''
+          ${lib.concatMapStrings (m: ''
+            hl.monitor({ output = "${m.output}", mode = "${m.mode}", position = "${m.position}", scale = ${luaValue m.scale}${lib.optionalString (m.transform != null) ", transform = ${toString m.transform}"} })
+          '') config.myHome.hyprland.monitors}
+          hl.config({ input = { kb_layout = "de" } })
         '';
       };
     };

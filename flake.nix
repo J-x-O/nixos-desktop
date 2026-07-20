@@ -9,7 +9,7 @@
     };
 
     illogical-flake = {
-      url = "github:J-x-O/illogical-flake/dev";
+      url = "github:J-x-O/illogical-flake/better_dev";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko.url = "github:nix-community/disko";
