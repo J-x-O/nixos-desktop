@@ -20,6 +20,16 @@ let
 
   spotifyWritableDir = "${vars.homeDirectory}/.local/share/spicetify-spotify";
   hookScriptPath = "${vars.homeDirectory}/.config/spicetify/material-you-spicetify.py";
+  onColorChangeScriptPath = "${vars.homeDirectory}/.config/spicetify/on-color-change.sh";
+  reloadScriptPath = "${vars.homeDirectory}/.config/spicetify/reload-live.mjs";
+
+  # Empirically, once `spicetify enable-devtools` has patched Spotify's offline.bnk,
+  # the client's remote-debugging endpoint consistently comes up on port 8088 (not the
+  # 9222 spicetify's own `watch` command passes as a launch flag -- we never pass that
+  # flag ourselves, so this is whatever Spotify's own developer-mode default is). Verified
+  # stable across many relaunches while developing this. If it ever stops matching, the
+  # reload script below just silently no-ops (fetch fails), so this isn't a hard dependency.
+  spotifyDevtoolsPort = 8088;
 
   # nixpkgs' spicetify-cli package only `cp -r`s the repo's checked-in jsHelper/ dir
   # (see pkgs/by-name/sp/spicetify-cli/package.nix), but jsHelper/spicetifyWrapper.js
@@ -88,6 +98,52 @@ in
         # (rather than waiting for the next wallpaper/color change to fire on_change_hook),
         # so every rebuild reflects the current system colors instead of reverting them.
         $DRY_RUN_CMD ${pkgs.python3}/bin/python3 "${hookScriptPath}" || true
+
+        # Reloads the active Spotify page in place via the Chrome DevTools Protocol --
+        # re-parses colors.css from disk like a real page load, but keeps the same OS
+        # process (no window destroy/recreate, no playback/tray/MPRIS interruption from
+        # killing the process). Best-effort: if Spotify isn't running or devtools isn't
+        # reachable, this silently no-ops -- colors.css is still correctly synced on disk
+        # either way, so it'll just apply next time Spotify is opened normally.
+        cat > "${reloadScriptPath}" << 'RELOADSCRIPTEOF'
+try {
+  const listResp = await fetch("http://127.0.0.1:${toString spotifyDevtoolsPort}/json/list");
+  const targets = await listResp.json();
+  const page = targets.find((t) => t.type === "page");
+  if (!page) process.exit(0);
+
+  const ws = new WebSocket(page.webSocketDebuggerUrl);
+  await new Promise((resolve, reject) => {
+    ws.addEventListener("open", resolve);
+    ws.addEventListener("error", reject);
+  });
+  ws.send(JSON.stringify({ id: 1, method: "Page.reload", params: { ignoreCache: true } }));
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  ws.close();
+} catch {
+  // Spotify not running / devtools not available -- nothing to do.
+}
+RELOADSCRIPTEOF
+
+        # kde-material-you-colors' on_change_hook runs this on every wallpaper/color change.
+        # material-you-spicetify.py only updates the *source* color.ini under
+        # ~/.config/spicetify/Themes/MaterialYou/ -- `spicetify apply` bakes a static
+        # colors.css into the writable Spotify copy once, so updating the source alone
+        # never reaches an already-patched (or already-running) Spotify. `spicetify refresh
+        # -s` regenerates that baked colors.css/user.css cheaply (no full re-patch), then
+        # reload-live.mjs pushes it into the running window without restarting it. (Neither
+        # `spicetify watch -s` nor `spicetify restart` proved reliable against this writable
+        # copy in testing -- watch never detected file changes and spun at ~85% CPU, restart
+        # silently no-op'd since it pgrep -x's for a process literally named "spotify", which
+        # ours isn't -- so this reimplements the reload directly instead.)
+        cat > "${onColorChangeScriptPath}" << 'ONCOLORCHANGEEOF'
+#!/usr/bin/env bash
+set -uo pipefail
+${pkgs.python3}/bin/python3 "${hookScriptPath}"
+${pkgs.spicetify-cli}/bin/spicetify refresh -s >/dev/null 2>&1
+${pkgs.nodejs}/bin/node "${reloadScriptPath}" >/dev/null 2>&1
+ONCOLORCHANGEEOF
+        $DRY_RUN_CMD chmod u+x "${onColorChangeScriptPath}"
       '';
 
       # spicetify apply rewrites config-xpui.ini in place (fills in [Backup] version/hash),
@@ -107,7 +163,7 @@ replace_colors          = 1
 overwrite_assets        = 0
 spotify_launch_flags    =
 check_spicetify_update  = 0
-always_enable_devtools  = 0
+always_enable_devtools  = 1
 spotify_path            = ${spotifyWritableDir}/share/spotify
 
 [Preprocesses]
@@ -138,6 +194,12 @@ SPICETIFYCONFEOF
       # account (no ~/.config/spotify/prefs), so don't fail the whole activation over it.
       home.activation.spicetifyApply = config.lib.dag.entryAfter [ "spicetifyConfig" ] ''
         $DRY_RUN_CMD ${pkgs.spicetify-cli}/bin/spicetify backup apply || true
+        # Patches Spotify's own ~/.cache/spotify/offline.bnk to permanently enable its
+        # remote-debugging endpoint, which on-color-change.sh needs to push live theme
+        # reloads (see reload-live.mjs above). Requires Spotify to have been launched at
+        # least once already (offline.bnk doesn't exist before that), so this is tolerant
+        # of failure on a fresh install -- it'll just succeed on the next activation instead.
+        $DRY_RUN_CMD ${pkgs.spicetify-cli}/bin/spicetify enable-devtools || true
         # Work around the missing jsHelper/spicetifyWrapper.js in nixpkgs' spicetify-cli
         # (see spicetifyWrapperJs above) -- must run after apply, since apply re-extracts
         # xpui.spa fresh every time and would otherwise wipe this out.
@@ -156,7 +218,7 @@ SPICETIFYCONFEOF
         [ "spicetifyTheme" ] ++ lib.optional hyprlandEnabled "copyIllogicalImpulseConfigs"
       ) ''
         confFile="$HOME/.config/kde-material-you-colors/config.conf"
-        hookCmd="${pkgs.python3}/bin/python3 ${hookScriptPath}"
+        hookCmd="${onColorChangeScriptPath}"
         if [ -f "$confFile" ]; then
           if grep -q "^on_change_hook" "$confFile"; then
             $DRY_RUN_CMD sed -i "s|^on_change_hook.*|on_change_hook = $hookCmd|" "$confFile"
