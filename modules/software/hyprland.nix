@@ -73,6 +73,14 @@
         };
       };
 
+      xdg.configFile."hypr/custom/execs.lua" = lib.mkOverride 0 {
+        text = ''
+          hl.on("hyprland.start", function ()
+            hl.exec_cmd("kdeconnect-indicator")
+          end)
+        '';
+      };
+
       xdg.configFile."hypr/custom/rules.lua" = lib.mkOverride 0 {
         text = ''
           hl.window_rule({ match = { class = "^(blender)$", title = "^(Blender File View)$" }, min_size = {900, 500} })

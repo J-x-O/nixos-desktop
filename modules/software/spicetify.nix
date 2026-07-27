@@ -58,6 +58,14 @@ let
   );
 
   hyprlandEnabled = config.myHome.hyprland.enable;
+
+  # Nix store paths are already content-addressed, so concatenating them is a free,
+  # exact "did anything relevant change" check -- changes if Spotify's version bumps,
+  # the theme pin bumps, or spicetify-cli/esbuild bump (spicetifyWrapperJs depends on
+  # both). Used to skip the expensive rsync + full re-patch on every activation, since
+  # otherwise those run unconditionally on every `nixos-rebuild switch`, even ones
+  # that touch nothing spicetify-related.
+  versionMarker = "${pkgs.spotify}|${materialYouTheme}|${spicetifyWrapperJs}";
 in
 {
   options.myHome.spicetify.enable = lib.mkEnableOption "spicetify auto re-theming for Spotify" // { default = true; };
@@ -76,12 +84,25 @@ in
       ];
 
       # Copy nixpkgs' read-only Spotify install into a writable location so spicetify
-      # can patch it in place. Runs on every activation; rsync only touches files that
-      # actually changed, so a Spotify version bump in nixpkgs is picked up for free.
+      # can patch it in place. Only re-copies (and re-patches, in spicetifyApply below)
+      # when versionMarker actually changed -- i.e. Spotify/theme/spicetify-cli bumped,
+      # or the writable copy is missing/was deleted -- not on every unrelated rebuild.
+      # spicetifyNeedsFullSync is a plain shell variable, not exported: home-manager
+      # concatenates all home.activation.* blocks into one script run by one bash
+      # process, so it stays in scope for spicetifyApply later in the same run.
       home.activation.spicetifySpotifyCopy = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-        $DRY_RUN_CMD mkdir -p "${spotifyWritableDir}/share"
-        $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -a --delete "${pkgs.spotify}/share/spotify/" "${spotifyWritableDir}/share/spotify/"
-        $DRY_RUN_CMD chmod -R u+w "${spotifyWritableDir}"
+        versionMarkerFile="${spotifyWritableDir}/.nix-version-marker"
+        if [ "$(cat "$versionMarkerFile" 2>/dev/null)" = "${versionMarker}" ]; then
+          spicetifyNeedsFullSync=0
+        else
+          spicetifyNeedsFullSync=1
+        fi
+
+        if [ "$spicetifyNeedsFullSync" = "1" ]; then
+          $DRY_RUN_CMD mkdir -p "${spotifyWritableDir}/share"
+          $DRY_RUN_CMD ${pkgs.rsync}/bin/rsync -a --delete "${pkgs.spotify}/share/spotify/" "${spotifyWritableDir}/share/spotify/"
+          $DRY_RUN_CMD chmod -R u+w "${spotifyWritableDir}"
+        fi
       '';
 
       # Install the MaterialYou spicetify theme and its kde-material-you-colors hook script.
@@ -163,7 +184,6 @@ replace_colors          = 1
 overwrite_assets        = 0
 spotify_launch_flags    =
 check_spicetify_update  = 0
-always_enable_devtools  = 1
 spotify_path            = ${spotifyWritableDir}/share/spotify
 
 [Preprocesses]
@@ -192,21 +212,29 @@ SPICETIFYCONFEOF
       # just `apply`) re-baselines every run, so it self-heals after a Spotify version bump
       # in nixpkgs. Tolerant of failure: Spotify may never have been launched yet on a fresh
       # account (no ~/.config/spotify/prefs), so don't fail the whole activation over it.
+      # Gated on spicetifyNeedsFullSync (set in spicetifySpotifyCopy above) -- skips the
+      # slow ~250-file re-patch entirely when nothing relevant changed since last time.
       home.activation.spicetifyApply = config.lib.dag.entryAfter [ "spicetifyConfig" ] ''
-        $DRY_RUN_CMD ${pkgs.spicetify-cli}/bin/spicetify backup apply || true
-        # Patches Spotify's own ~/.cache/spotify/offline.bnk to permanently enable its
-        # remote-debugging endpoint, which on-color-change.sh needs to push live theme
-        # reloads (see reload-live.mjs above). Requires Spotify to have been launched at
-        # least once already (offline.bnk doesn't exist before that), so this is tolerant
-        # of failure on a fresh install -- it'll just succeed on the next activation instead.
-        $DRY_RUN_CMD ${pkgs.spicetify-cli}/bin/spicetify enable-devtools || true
-        # Work around the missing jsHelper/spicetifyWrapper.js in nixpkgs' spicetify-cli
-        # (see spicetifyWrapperJs above) -- must run after apply, since apply re-extracts
-        # xpui.spa fresh every time and would otherwise wipe this out.
-        helperDir="${spotifyWritableDir}/share/spotify/Apps/xpui/helper"
-        if [ -d "$helperDir" ]; then
-          $DRY_RUN_CMD cp -f "${spicetifyWrapperJs}" "$helperDir/spicetifyWrapper.js"
-          $DRY_RUN_CMD chmod u+w "$helperDir/spicetifyWrapper.js"
+        if [ "$spicetifyNeedsFullSync" = "1" ]; then
+          # Only write the marker below if this actually succeeds -- if Spotify hasn't
+          # been launched yet (no ~/.config/spotify/prefs) this can fail, and we want
+          # the next activation to retry the full patch rather than wrongly think it's
+          # already done.
+          if $DRY_RUN_CMD ${pkgs.spicetify-cli}/bin/spicetify backup apply; then
+            # Patches Spotify's own ~/.cache/spotify/offline.bnk to permanently enable its
+            # remote-debugging endpoint, which on-color-change.sh needs to push live theme
+            # reloads (see reload-live.mjs above).
+            $DRY_RUN_CMD ${pkgs.spicetify-cli}/bin/spicetify enable-devtools || true
+            # Work around the missing jsHelper/spicetifyWrapper.js in nixpkgs' spicetify-cli
+            # (see spicetifyWrapperJs above) -- must run after apply, since apply re-extracts
+            # xpui.spa fresh every time and would otherwise wipe this out.
+            helperDir="${spotifyWritableDir}/share/spotify/Apps/xpui/helper"
+            if [ -d "$helperDir" ]; then
+              $DRY_RUN_CMD cp -f "${spicetifyWrapperJs}" "$helperDir/spicetifyWrapper.js"
+              $DRY_RUN_CMD chmod u+w "$helperDir/spicetifyWrapper.js"
+            fi
+            $DRY_RUN_CMD bash -c "echo '${versionMarker}' > '${spotifyWritableDir}/.nix-version-marker'"
+          fi
         fi
       '';
 
