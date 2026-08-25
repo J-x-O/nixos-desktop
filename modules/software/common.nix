@@ -14,10 +14,10 @@
         bitwig-studio
         blender
         inkscape
+        scribus
         obs-studio
         kicad
         prusa-slicer
-        orca-slicer
         upscayl
         vlc
         davinci-resolve
