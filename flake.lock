@@ -78,6 +78,43 @@
         "type": "github"
       }
     },
+    "hypr-kdeconnect-fix": {
+      "inputs": {
+        "hypr-kdeconnect-fix-src": "hypr-kdeconnect-fix-src",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791563865,
+        "narHash": "sha256-vHR8ycsq8gsiNcL77YLzJLS5L1DeUoVZ9Z7FmXqeQe0=",
+        "owner": "boscovn",
+        "repo": "hypr-kdeconnect-fix-flake",
+        "rev": "f0c8368988cffe1fbcf3acdc5012bcab381617c8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "boscovn",
+        "repo": "hypr-kdeconnect-fix-flake",
+        "type": "github"
+      }
+    },
+    "hypr-kdeconnect-fix-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790301701,
+        "narHash": "sha256-fswdn3iq1iCXALLWC/p5EgRYbHIMgNHWEhxEtbHtCFY=",
+        "owner": "gfhdhytghd",
+        "repo": "hypr-kdeconnect-fix",
+        "rev": "362b904235c1b1d679eef73cbd5ad08d313d8954",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gfhdhytghd",
+        "repo": "hypr-kdeconnect-fix",
+        "type": "github"
+      }
+    },
     "illogical-flake": {
       "inputs": {
         "dotfiles": "dotfiles",
@@ -213,6 +250,7 @@
       "inputs": {
         "disko": "disko",
         "home-manager": "home-manager",
+        "hypr-kdeconnect-fix": "hypr-kdeconnect-fix",
         "illogical-flake": "illogical-flake",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-godot": "nixpkgs-godot",

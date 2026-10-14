@@ -26,6 +26,11 @@
       url = "github:Diolinux/PhotoGIMP";
       flake = false;
     };
+    # RemoteDesktop portal for KDE Connect remote input; see modules/software/kdeconnect.nix
+    hypr-kdeconnect-fix = {
+      url = "github:boscovn/hypr-kdeconnect-fix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     zed-netcoredbg = {
       url = "github:qwadrox/zed-netcoredbg";
       flake = false;
