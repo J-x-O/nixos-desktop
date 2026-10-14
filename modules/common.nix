@@ -1,14 +1,25 @@
-{ vars, pkgs, ... }: {
+{ vars, pkgs, inputs, ... }: {
 
   system.stateVersion = "25.11";
   nixpkgs.config.allowUnfree = true;
+
+  # Keep Godot frozen at its pinned nixpkgs rev (see flake.nix) so system
+  # updates don't push a new editor version onto the team.
+  nixpkgs.overlays = [
+    (final: prev: {
+      godot-mono = (import inputs.nixpkgs-godot {
+        inherit (prev.stdenv.hostPlatform) system;
+        config.allowUnfree = true;
+      }).godot-mono;
+    })
+  ];
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
 
   users.users.${vars.username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "audio" "dialout"];
+    extraGroups = [ "wheel" "networkmanager" "video" "audio" "dialout" "input"];
     hashedPassword = "$6$A8/25/b1pmRdkXMi$JcVQT.AV9hUO4qI593qP6PihBQczowmk12.9XQHo/O39lvx/1peXzjmsmaMtAU7tQXb4juLKf1ureC.9Vs1Zw1";
     shell = pkgs.fish;
   };
@@ -16,6 +27,10 @@
   services.envfs.enable = true; # fix for some platformio stuff
 
   networking.networkmanager.enable = true;
+
+  services.tailscale.enable = true;
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
+  networking.firewall.checkReversePath = "loose";
 
   hardware.bluetooth = {
     enable = true;
@@ -75,6 +90,7 @@
     git
     fastfetch
     ghostscript
+    cmatrix
   ];
 
   # germansky

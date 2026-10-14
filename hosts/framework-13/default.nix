@@ -15,5 +15,6 @@
         { output = "eDP-1"; position = "0x0"; scale = 1.666667; }
       ];
     };
+    gaming.enable = true;
   };
 }

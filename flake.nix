@@ -3,6 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # Pinned so `nix flake update` doesn't force a new Godot version on the team.
+    # Bump this rev deliberately when everyone agrees to update.
+    nixpkgs-godot.url = "github:nixos/nixpkgs/6258c89d88bc4ca97f955b7b47b8f828d091ecdc";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

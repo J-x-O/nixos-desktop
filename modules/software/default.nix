@@ -6,7 +6,9 @@
     ./freecad.nix
     ./gimp.nix
     ./hyprland.nix
+    ./kdeconnect.nix
     ./mail.nix
+    ./photon-studio.nix
     ./spicetify.nix
     ./steam.nix
     ./zed.nix

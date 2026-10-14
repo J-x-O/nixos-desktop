@@ -6,8 +6,6 @@
     # virtualisation.docker.enable = true;
     # users.users.${vars.username}.extraGroups = [ "docker" ];
 
-    programs.kdeconnect.enable = true;
-
     home-manager.users.${vars.username} = {
       home.packages = with pkgs; [
         # Creative & Media
@@ -29,6 +27,7 @@
         godot-mono
         sourcegit
         ttyper
+        bun
 
         # Music / Audio Production
         decent-sampler          # might need custom derivation
@@ -42,6 +41,7 @@
         loupe #image viewer
         kdePackages.kate #quick edit files
         kdePackages.ark
+        unrar #rar backend for ark
         kdePackages.filelight
         kdePackages.kcalc
       ];

@@ -118,6 +118,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-godot": {
+      "locked": {
+        "lastModified": 1783309530,
+        "narHash": "sha256-ccD51WkEPHDgcvgJtS/qvQ6rY9A9RmYZOyDwuWLxZKU=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6258c89d88bc4ca97f955b7b47b8f828d091ecdc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6258c89d88bc4ca97f955b7b47b8f828d091ecdc",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1783309530,
@@ -199,6 +215,7 @@
         "home-manager": "home-manager",
         "illogical-flake": "illogical-flake",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-godot": "nixpkgs-godot",
         "photogimp": "photogimp",
         "zed-netcoredbg": "zed-netcoredbg",
         "zen-browser": "zen-browser"

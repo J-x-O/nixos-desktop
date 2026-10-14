@@ -5,6 +5,7 @@
       ../modules/home.nix
       ../modules/security.nix
       ../modules/session.nix
+      ../modules/focus.nix
     ];
 
   # we are using efi, so nodev because internet said so yes

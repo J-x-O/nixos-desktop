@@ -11,6 +11,8 @@ let
   prefs = {
     "middlemouse.paste" = false;
     "zen.view.experimental-no-window-controls" = true;
+    # DNS-over-HTTPS off so the browser resolves through the system (and /etc/hosts blocklist)
+    "network.trr.mode" = 5;
   };
 
   extensions = [
