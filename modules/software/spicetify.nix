@@ -169,9 +169,18 @@ ONCOLORCHANGEEOF
 
       # spicetify apply rewrites config-xpui.ini in place (fills in [Backup] version/hash),
       # so it must be a plain writable file, not a home-manager-managed store symlink.
-      # Regenerated fresh every activation; spicetify's own [Backup] bookkeeping gets
-      # re-derived immediately after by spicetifyApply below.
+      # Only (re)written when a full sync is about to run (spicetifyApply below fills in
+      # [Backup] right after, in the same activation) or the file doesn't exist yet --
+      # NOT unconditionally on every activation. spicetify itself keeps [Backup] pointed
+      # at the currently-applied version/hash across ordinary rebuilds; clobbering it here
+      # on every run (as this used to do) reset [Backup] to blank without spicetifyApply
+      # ever running to refill it (that's gated on spicetifyNeedsFullSync too), which made
+      # spicetify permanently believe "Spotify version and backup version are mismatched"
+      # after the very first rebuild -- silently breaking `spicetify refresh -s` (called by
+      # on-color-change.sh) for every color change from then on, since its stderr/stdout are
+      # swallowed. colors.css would only ever reflect whatever was baked at that first apply.
       home.activation.spicetifyConfig = config.lib.dag.entryAfter [ "spicetifyTheme" ] ''
+        if [ "$spicetifyNeedsFullSync" = "1" ] || [ ! -f "$HOME/.config/spicetify/config-xpui.ini" ]; then
         $DRY_RUN_CMD mkdir -p "$HOME/.config/spicetify"
         cat > "$HOME/.config/spicetify/config-xpui.ini" << 'SPICETIFYCONFEOF'
 [Setting]
@@ -206,6 +215,7 @@ experimental_features = 1
 version =
 with    =
 SPICETIFYCONFEOF
+        fi
       '';
 
       # Bootstrap/refresh the patch against the writable copy. `backup apply` (rather than
