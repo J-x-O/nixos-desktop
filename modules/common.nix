@@ -17,6 +17,15 @@
     experimental-features = nix-command flakes
   '';
 
+  # keep the store from filling the disk: weekly gc of generations older than 14 days
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+  nix.settings.auto-optimise-store = true;
+  boot.tmp.cleanOnBoot = true;
+
   users.users.${vars.username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" "audio" "dialout" "input"];
