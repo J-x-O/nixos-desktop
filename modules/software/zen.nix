@@ -1,4 +1,4 @@
-{ inputs, pkgs, lib, ... }:
+{ inputs, vars, lib, ... }:
 let
   extension = shortId: guid: {
     name = guid;
@@ -22,20 +22,19 @@ let
     #(extension "ublock-origin" "uBlock0@raymondhill.net")
   ];
 in {
-  environment.systemPackages = [
-    (pkgs.wrapFirefox
-      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.zen-browser-unwrapped {
-        extraPrefs = lib.concatLines (
-          lib.mapAttrsToList (
-            name: value: ''lockPref(${lib.strings.toJSON name}, ${lib.strings.toJSON value});''
-          ) prefs
-        );
+  # no official zen package/flake exists (nixpkgs PR still open), 0xc000022070's flake is the community standard
+  # binary: zen-beta, desktop entry: zen-beta.desktop
+  home-manager.users.${vars.username} = {
+    imports = [ inputs.zen-browser.homeModules.beta ];
 
-        extraPolicies = {
-          DisableTelemetry = true;
-          # ExtensionSettings = builtins.listToAttrs extensions;
-        };
-      }
-    )
-  ];
+    programs.zen-browser = {
+      enable = true;
+      policies = {
+        DisableTelemetry = true;
+        DisableAppUpdate = true;
+        Preferences = lib.mapAttrs (_: value: { Value = value; Status = "locked"; }) prefs;
+        # ExtensionSettings = builtins.listToAttrs extensions;
+      };
+    };
+  };
 }

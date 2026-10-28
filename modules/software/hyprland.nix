@@ -53,7 +53,7 @@
 
       xdg.configFile."hypr/custom/keybinds.lua" = lib.mkOverride 0 {
         text = ''
-          hl.bind("SUPER + W", hl.dsp.exec_cmd("zen"), { description = "Browser" })
+          hl.bind("SUPER + W", hl.dsp.exec_cmd("zen-beta"), { description = "Browser" })
         '';
       };
 
@@ -61,21 +61,24 @@
         enable = true;
         defaultApplications = {
           "inode/directory" = "org.kde.dolphin.desktop";
-          "text/html" = "zen.desktop";
-          "x-scheme-handler/http" = "zen.desktop";
-          "x-scheme-handler/https" = "zen.desktop";
-          "x-scheme-handler/about" = "zen.desktop";
-          "x-scheme-handler/unknown" = "zen.desktop";
-          "application/xhtml+xml" = "zen.desktop";
-          "application/x-extension-htm" = "zen.desktop";
-          "application/x-extension-html" = "zen.desktop";
-          "application/x-extension-xhtml" = "zen.desktop";
+          "text/html" = "zen-beta.desktop";
+          "x-scheme-handler/http" = "zen-beta.desktop";
+          "x-scheme-handler/https" = "zen-beta.desktop";
+          "x-scheme-handler/about" = "zen-beta.desktop";
+          "x-scheme-handler/unknown" = "zen-beta.desktop";
+          "application/xhtml+xml" = "zen-beta.desktop";
+          "application/x-extension-htm" = "zen-beta.desktop";
+          "application/x-extension-html" = "zen-beta.desktop";
+          "application/x-extension-xhtml" = "zen-beta.desktop";
         };
       };
 
       xdg.configFile."hypr/custom/execs.lua" = lib.mkOverride 0 {
         text = ''
           hl.on("hyprland.start", function ()
+            -- start-hyprland doesn't activate graphical-session.target, and xdg-desktop-portal is
+            -- Requisite= on it, so file pickers fail without this. Import the env first so the portal sees it.
+            hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE && systemctl --user start nixos-fake-graphical-session.target")
             hl.exec_cmd("kdeconnect-indicator")
           end)
         '';

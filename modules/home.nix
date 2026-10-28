@@ -27,7 +27,7 @@
     xdg.mimeApps = {
       enable = true;
       defaultApplications = {
-        "application/pdf" = [ "zen.desktop" ];
+        "application/pdf" = [ "zen-beta.desktop" ];
       };
     };
 

@@ -230,6 +230,17 @@ SPICETIFYCONFEOF
           # been launched yet (no ~/.config/spotify/prefs) this can fail, and we want
           # the next activation to retry the full patch rather than wrongly think it's
           # already done.
+          # spicetify takes "the Spotify version" from prefs' app.last-launched-version, not
+          # from the install itself. Right after a nixpkgs Spotify bump that still holds the
+          # *old* version (Spotify hasn't been launched since), so [Backup] gets stamped
+          # with a stale version; once Spotify next launches and updates prefs, every
+          # `spicetify refresh -s` in on-color-change.sh fails with "Spotify version and
+          # backup version are mismatched" and color changes silently stop applying.
+          # Pin prefs to the version actually being patched so the two always agree.
+          prefsFile="${vars.homeDirectory}/.config/spotify/prefs"
+          if [ -f "$prefsFile" ]; then
+            $DRY_RUN_CMD sed -i 's|^app\.last-launched-version=.*|app.last-launched-version="${pkgs.spotify.version}"|' "$prefsFile"
+          fi
           if $DRY_RUN_CMD ${pkgs.spicetify-cli}/bin/spicetify backup apply; then
             # Patches Spotify's own ~/.cache/spotify/offline.bnk to permanently enable its
             # remote-debugging endpoint, which on-color-change.sh needs to push live theme

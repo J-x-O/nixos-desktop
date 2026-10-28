@@ -13,14 +13,15 @@
     };
 
     illogical-flake = {
-      url = "github:J-x-O/illogical-flake/better_dev";
+      url = "github:J-x-O/illogical-flake/a62d694cb7e6b747437b9bc6e3c68ffc6c146d5c";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko.url = "github:nix-community/disko";
 
     zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
+      url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
     photogimp = {
       url = "github:Diolinux/PhotoGIMP";

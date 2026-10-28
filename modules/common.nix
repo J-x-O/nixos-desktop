@@ -91,7 +91,11 @@
     fastfetch
     ghostscript
     cmatrix
+    rclone
   ];
+
+  programs.fuse.enable = true;
+  programs.fuse.userAllowOther = true;
 
   # germansky
   console.keyMap = "de";

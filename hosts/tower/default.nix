@@ -6,6 +6,12 @@
     ./hardware-configuration.nix
   ];
   networking.hostName = "tower";
+
+  # eID; openFirewall allows UDP 24727 so the phone can be found as a card reader
+  programs.ausweisapp = {
+    enable = true;
+    openFirewall = true;
+  };
   
   myHome = {
     hyprland = {

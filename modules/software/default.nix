@@ -1,6 +1,7 @@
 {...}: {
   imports = [
     ./aseprite.nix
+    ./chitubox.nix
     ./common.nix
     ./dolphin.nix
     ./freecad.nix
@@ -8,7 +9,9 @@
     ./hyprland.nix
     ./kdeconnect.nix
     ./mail.nix
-    ./photon-studio.nix
+    ./craft
+    ./lycheeslicer.nix
+    ./mslicer.nix
     ./spicetify.nix
     ./steam.nix
     ./zed.nix

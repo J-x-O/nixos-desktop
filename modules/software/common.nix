@@ -27,7 +27,8 @@
         godot-mono
         sourcegit
         ttyper
-        bun
+        nodejs   # JS runtime (vite, tsx, npm)
+        bun      # package manager for bun.lock projects
 
         # Music / Audio Production
         decent-sampler          # might need custom derivation
@@ -37,7 +38,6 @@
         spotify
 
         # Office & Productivity
-        libreoffice-fresh
         loupe #image viewer
         kdePackages.kate #quick edit files
         kdePackages.ark
