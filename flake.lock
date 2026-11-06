@@ -124,17 +124,17 @@
         "nur": "nur"
       },
       "locked": {
-        "lastModified": 1793955411,
-        "narHash": "sha256-HcdmHuMy5FWzlJdyY1IHe0emQgPZwoTKKzfxL7nbDaw=",
+        "lastModified": 1793984532,
+        "narHash": "sha256-zRXCxOciwy2Z5JTPqyLSnNNsRUyj7Kg6MNuo9I/GBEE=",
         "owner": "J-x-O",
         "repo": "illogical-flake",
-        "rev": "728d0c14a837ca47abd07b2e8cafb30207e97ba6",
+        "rev": "bbdb388e9ea07e70e7904c823954ea8b3e39d131",
         "type": "github"
       },
       "original": {
         "owner": "J-x-O",
         "repo": "illogical-flake",
-        "rev": "728d0c14a837ca47abd07b2e8cafb30207e97ba6",
+        "rev": "bbdb388e9ea07e70e7904c823954ea8b3e39d131",
         "type": "github"
       }
     },

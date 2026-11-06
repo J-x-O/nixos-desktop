@@ -108,16 +108,27 @@ in
       # Install the MaterialYou spicetify theme and its kde-material-you-colors hook script.
       home.activation.spicetifyTheme = config.lib.dag.entryAfter [ "spicetifySpotifyCopy" ] ''
         $DRY_RUN_CMD mkdir -p "$HOME/.config/spicetify/Themes"
-        if [ -e "$HOME/.config/spicetify/Themes/MaterialYou" ] || [ -L "$HOME/.config/spicetify/Themes/MaterialYou" ]; then
-          $DRY_RUN_CMD rm -rf "$HOME/.config/spicetify/Themes/MaterialYou"
+        themeDir="$HOME/.config/spicetify/Themes/MaterialYou"
+        # Keep the last synced palette: the hook script reads kde-material-you-colors' output
+        # from /tmp/kde-material-you-colors-$USER.json, which a reboot wipes. When activation
+        # runs without it (at boot, or a rebuild before the first color change), re-syncing
+        # below is a no-op, and Spotify would get the theme's default palette baked in.
+        savedColors=""
+        if [ -f "$themeDir/color.ini" ]; then
+          savedColors="$(mktemp)"
+          cp -f "$themeDir/color.ini" "$savedColors"
         fi
-        $DRY_RUN_CMD cp -r "${materialYouTheme}/MaterialYou" "$HOME/.config/spicetify/Themes/MaterialYou"
+        if [ -e "$themeDir" ] || [ -L "$themeDir" ]; then
+          $DRY_RUN_CMD rm -rf "$themeDir"
+        fi
+        $DRY_RUN_CMD cp -r "${materialYouTheme}/MaterialYou" "$themeDir"
         $DRY_RUN_CMD cp -f "${materialYouTheme}/material-you-spicetify.py" "${hookScriptPath}"
-        $DRY_RUN_CMD chmod -R u+w "$HOME/.config/spicetify/Themes/MaterialYou" "${hookScriptPath}"
-        # The copy above just reset color.ini to the theme's bundled default palette.
-        # Immediately re-sync it from kde-material-you-colors' last-generated output
-        # (rather than waiting for the next wallpaper/color change to fire on_change_hook),
-        # so every rebuild reflects the current system colors instead of reverting them.
+        $DRY_RUN_CMD chmod -R u+w "$themeDir" "${hookScriptPath}"
+        if [ -n "$savedColors" ]; then
+          $DRY_RUN_CMD cp -f "$savedColors" "$themeDir/color.ini"
+          rm -f "$savedColors"
+        fi
+        # Then re-sync from kde-material-you-colors' current output if it's there.
         $DRY_RUN_CMD ${pkgs.python3}/bin/python3 "${hookScriptPath}" || true
 
         # Reloads the active Spotify page in place via the Chrome DevTools Protocol --
@@ -256,6 +267,10 @@ SPICETIFYCONFEOF
             fi
             $DRY_RUN_CMD bash -c "echo '${versionMarker}' > '${spotifyWritableDir}/.nix-version-marker'"
           fi
+        else
+          # No re-patch needed, but bake the (possibly just re-synced) color.ini into the
+          # patched copy, so it never lags behind the current system colors.
+          $DRY_RUN_CMD ${pkgs.spicetify-cli}/bin/spicetify refresh -s >/dev/null 2>&1 || true
         fi
       '';
 

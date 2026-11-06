@@ -13,7 +13,7 @@
     };
 
     illogical-flake = {
-      url = "github:J-x-O/illogical-flake/728d0c14a837ca47abd07b2e8cafb30207e97ba6";
+      url = "github:J-x-O/illogical-flake/bbdb388e9ea07e70e7904c823954ea8b3e39d131";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     disko.url = "github:nix-community/disko";
