@@ -5,13 +5,15 @@
     ./common.nix
     ./dolphin.nix
     ./freecad.nix
-    ./gimp.nix
+    ./godot.nix
     ./hyprland.nix
     ./kdeconnect.nix
     ./mail.nix
+    ./media-inhibit.nix
     ./craft
     ./lycheeslicer.nix
     ./mslicer.nix
+    ./opencode.nix
     ./spicetify.nix
     ./steam.nix
     ./zed.nix

@@ -6,7 +6,7 @@
 
   # /etc/hosts has no wildcards, so expand each domain with the subdomains actually in use.
   subdomains = [ "" "www." "m." "mobile." "api." "app." "i." "l." "web." "music." "old." "new." "gql." ];
-  hostnames = lib.concatMap (domain: map (sub: sub + domain) subdomains) cfg.domains;
+  hostnames = lib.concatMap (domain: map (sub: sub + domain) subdomains) cfg.domains ++ cfg.exactHostnames;
 in {
   options.myHome.focus = {
     enable = lib.mkEnableOption "blocking of distracting websites" // { default = true; };
@@ -29,6 +29,16 @@ in {
         "twitch.tv" "ttvnw.net"
       ];
       description = "Domains (plus common subdomains) to block.";
+    };
+    exactHostnames = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [
+        # GTA V / BattlEye session hosts
+        "paradise-s1.battleye.com"
+        "test-s1.battleye.com"
+        "paradiseenhanced-s1.battleye.com"
+      ];
+      description = "Hostnames to block verbatim, without subdomain expansion.";
     };
   };
 

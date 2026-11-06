@@ -1,18 +1,8 @@
-{ vars, pkgs, inputs, ... }: {
+{ vars, pkgs, ... }: {
 
   system.stateVersion = "25.11";
   nixpkgs.config.allowUnfree = true;
 
-  # Keep Godot frozen at its pinned nixpkgs rev (see flake.nix) so system
-  # updates don't push a new editor version onto the team.
-  nixpkgs.overlays = [
-    (final: prev: {
-      godot-mono = (import inputs.nixpkgs-godot {
-        inherit (prev.stdenv.hostPlatform) system;
-        config.allowUnfree = true;
-      }).godot-mono;
-    })
-  ];
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';

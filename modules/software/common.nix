@@ -29,6 +29,7 @@
         ttyper
         nodejs   # JS runtime (vite, tsx, npm)
         bun      # package manager for bun.lock projects
+        claude-code  # `claude` in the terminal, shares ~/.claude + ~/.claude.json (craft mcp servers) with zed's agent
 
         # Music / Audio Production
         decent-sampler          # might need custom derivation

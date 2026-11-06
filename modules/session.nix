@@ -17,6 +17,11 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
+    # Match the package derivation Hydra builds into cache.nixos.org. The module otherwise
+    # overrides hyprland with withUWSM = false, which produces an uncached derivation and
+    # recompiles the whole compositor on every update. start-hyprland is unaffected (uwsm is
+    # only used by the hyprland-uwsm session entry).
+    withUWSM = true;
   };
 
   # Required services for illogical-impulse

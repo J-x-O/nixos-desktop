@@ -34,14 +34,16 @@
 
   config = lib.mkIf config.myHome.hyprland.enable {
 
-    # adds the relevant dependency which is broken in kde-material-you-colors package
+    # nixpkgs moved kde-material-you-colors out of python3Packages into a top-level by-name
+    # package (v2.2.0, which now pulls python-magic and pywal16 itself, so the old dependency
+    # patch is obsolete). illogical-impulse's python3.withPackages still asks for it by the old
+    # name, and that env's bin/ is what puts the kde-material-you-colors daemon on PATH, so
+    # re-expose the top-level package under python3Packages rather than patching the pinned flake.
     nixpkgs.overlays = [
       (final: prev: {
         python3 = prev.python3.override {
-          packageOverrides = pyself: pysuper: {
-            kde-material-you-colors = pysuper.kde-material-you-colors.overridePythonAttrs (old: {
-              dependencies = (old.dependencies or []) ++ [ pyself.python-magic ];
-            });
+          packageOverrides = _: _: {
+            kde-material-you-colors = prev.kde-material-you-colors;
           };
         };
       })
@@ -54,6 +56,24 @@
       xdg.configFile."hypr/custom/keybinds.lua" = lib.mkOverride 0 {
         text = ''
           hl.bind("SUPER + W", hl.dsp.exec_cmd("zen-beta"), { description = "Browser" })
+
+          -- terminal binds: in dolphin, fire its own "Open Terminal" (Shift+F4) so the terminal starts in
+          -- the folder that window shows (dolphin launches TerminalApplication from kdeglobals).
+          -- explicit down/up instead of send_shortcut: that one marks the bind release-pending, so the
+          -- function runs again on key release, sees the new terminal focused and opens a second one
+          local function terminal_here()
+            local win = hl.get_active_window()
+            if win and win.class == "org.kde.dolphin" then
+              hl.dispatch(hl.dsp.send_key_state({ mods = "SHIFT", key = "F4", state = "down", window = win }))
+              hl.dispatch(hl.dsp.send_key_state({ mods = "SHIFT", key = "F4", state = "up", window = win }))
+            else
+              hl.dispatch(hl.dsp.exec_cmd(terminal))
+            end
+          end
+          for _, keys in ipairs({ "SUPER + Return", "SUPER + T", "CTRL + ALT + T" }) do
+            hl.unbind(keys)
+            hl.bind(keys, terminal_here, keys == "SUPER + Return" and { description = "App: Terminal" } or nil)
+          end
         '';
       };
 
