@@ -74,6 +74,18 @@
             hl.unbind(keys)
             hl.bind(keys, terminal_here, keys == "SUPER + Return" and { description = "App: Terminal" } or nil)
           end
+
+          -- super tap -> search: upstream binds it on press, so hyprland always sends quickshell the
+          -- release too, even after super+q etc. the hyprlang config cancelled that with a
+          -- `Super, catchall` interrupt bind, but lua only allows catchall inside submaps, so the port
+          -- dropped it. as release binds, hyprland itself skips them once another chord completes.
+          local qsIsAlive = "qs -c $qsConfig ipc call TEST_ALIVE"
+          for _, keys in ipairs({ "SUPER + SUPER_L", "SUPER + SUPER_R" }) do
+            hl.unbind(keys)
+            hl.bind(keys, hl.dsp.global("quickshell:searchToggleRelease"),
+              { release = true, description = keys == "SUPER + SUPER_L" and "Shell: Toggle search" or nil })
+            hl.bind(keys, hl.dsp.exec_cmd(qsIsAlive .. " || pkill fuzzel || fuzzel"), { release = true })
+          end
         '';
       };
 
