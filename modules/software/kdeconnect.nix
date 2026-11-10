@@ -29,6 +29,11 @@ in {
           $DRY_RUN_CMD ${pkgs.gnused}/bin/sed -i '/impl\.portal\.RemoteDesktop/d' "$portalConf"
           $DRY_RUN_CMD bash -c "printf '%s\n' \"$route\" >> \"$portalConf\""
         fi
+        # illogical-impulse also routes FileChooser to xdg-desktop-portal-kde, which isn't installed,
+        # so every file picker fails. Use the GTK portal instead.
+        if [ -f "$portalConf" ] && grep -qxF "org.freedesktop.impl.portal.FileChooser = kde" "$portalConf"; then
+          $DRY_RUN_CMD ${pkgs.gnused}/bin/sed -i 's/^\(org\.freedesktop\.impl\.portal\.FileChooser\) = kde$/\1 = gtk/' "$portalConf"
+        fi
       '';
   };
 }
