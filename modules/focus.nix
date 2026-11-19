@@ -20,7 +20,7 @@ in {
         # TikTok
         "tiktok.com" "tiktokv.com" "tiktokcdn.com"
         # Reddit
-        "reddit.com" "redd.it" "redditmedia.com" "redditstatic.com"
+        #"reddit.com" "redd.it" "redditmedia.com" "redditstatic.com"
         # X / Twitter
         "x.com" "twitter.com" "t.co" "twimg.com"
         # Facebook
