@@ -16,6 +16,7 @@
     ./opencode.nix
     ./spicetify.nix
     ./steam.nix
+    ./syncthing.nix
     ./zed.nix
     ./zed-godot.nix
     ./wine.nix
