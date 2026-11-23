@@ -1,5 +1,6 @@
 {...}: {
   imports = [
+    ./agent-memory.nix
     ./aseprite.nix
     ./chitubox.nix
     ./common.nix
