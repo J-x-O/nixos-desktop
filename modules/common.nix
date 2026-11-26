@@ -14,6 +14,14 @@
     options = "--delete-older-than 14d";
   };
   nix.settings.auto-optimise-store = true;
+
+  # Don't let local builds saturate the machine. Builds run inside nix-daemon, so a
+  # `systemd-run`/`nice` wrapper on the client wouldn't reach them; cap parallelism
+  # deterministically and put a hard cgroup ceiling on the daemon itself.
+  nix.settings.max-jobs = 2;
+  nix.settings.cores = 4;
+  systemd.services.nix-daemon.serviceConfig.CPUQuota = "60%";
+
   boot.tmp.cleanOnBoot = true;
 
   users.users.${vars.username} = {
